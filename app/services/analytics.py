@@ -3,11 +3,15 @@ from collections import Counter
 
 import networkx as nx
 from sklearn.cluster import KMeans
+<<<<<<< codex/build-grindemy-webpage-for-news-and-research-rd9adc
 from sklearn.decomposition import PCA
+=======
+>>>>>>> main
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sqlmodel import Session, delete, select
 
 from app.models import NetworkMetric, NewsArticle, TopicCluster
+<<<<<<< codex/build-grindemy-webpage-for-news-and-research-rd9adc
 from app.schemas import (
     KMeansPoint,
     KMeansVisualization,
@@ -15,10 +19,13 @@ from app.schemas import (
     NetworkNode,
     NetworkVisualization,
 )
+=======
+>>>>>>> main
 
 WORD_RE = re.compile(r"[A-Za-z][A-Za-z0-9]{2,}")
 
 
+<<<<<<< codex/build-grindemy-webpage-for-news-and-research-rd9adc
 def _build_feature_matrix(articles: list[NewsArticle]):
     texts = [f"{a.title} {a.summary or ''}" for a in articles]
     vectorizer = TfidfVectorizer(stop_words="english", max_features=1000)
@@ -26,12 +33,21 @@ def _build_feature_matrix(articles: list[NewsArticle]):
     return matrix, vectorizer
 
 
+=======
+>>>>>>> main
 def build_topic_clusters(session: Session, k: int = 4) -> list[TopicCluster]:
     articles = session.exec(select(NewsArticle)).all()
     if len(articles) < 2:
         return []
 
+<<<<<<< codex/build-grindemy-webpage-for-news-and-research-rd9adc
     matrix, vectorizer = _build_feature_matrix(articles)
+=======
+    texts = [f"{a.title} {a.summary or ''}" for a in articles]
+    vectorizer = TfidfVectorizer(stop_words="english", max_features=1000)
+    matrix = vectorizer.fit_transform(texts)
+
+>>>>>>> main
     k = max(1, min(k, len(articles)))
     model = KMeans(n_clusters=k, n_init="auto", random_state=42)
     labels = model.fit_predict(matrix)
@@ -63,6 +79,7 @@ def build_topic_clusters(session: Session, k: int = 4) -> list[TopicCluster]:
     return clusters
 
 
+<<<<<<< codex/build-grindemy-webpage-for-news-and-research-rd9adc
 def get_kmeans_visualization(session: Session, k: int = 4) -> KMeansVisualization:
     articles = session.exec(select(NewsArticle).order_by(NewsArticle.published_at.desc())).all()
     if len(articles) < 2:
@@ -102,6 +119,8 @@ def get_kmeans_visualization(session: Session, k: int = 4) -> KMeansVisualizatio
     return KMeansVisualization(points=points)
 
 
+=======
+>>>>>>> main
 def build_keyword_network(session: Session, top_n: int = 25) -> list[NetworkMetric]:
     articles = session.exec(select(NewsArticle)).all()
     if not articles:
@@ -141,6 +160,7 @@ def build_keyword_network(session: Session, top_n: int = 25) -> list[NetworkMetr
     for m in metrics:
         session.refresh(m)
     return metrics
+<<<<<<< codex/build-grindemy-webpage-for-news-and-research-rd9adc
 
 
 def get_network_visualization(session: Session, top_n: int = 25) -> NetworkVisualization:
@@ -183,3 +203,5 @@ def get_network_visualization(session: Session, top_n: int = 25) -> NetworkVisua
         for u, v, data in subgraph.edges(data=True)
     ]
     return NetworkVisualization(nodes=nodes, edges=edges)
+=======
+>>>>>>> main
